@@ -1,0 +1,86 @@
+Templates de Usados en la Herramienta
+
+1.- Se instalo un template proveniente de botbuilder.
+	Es importante ejecutar una CMD en modo Administrador
+	y ejecutar el siguinete commando : 
+	
+	>yo botbuilder
+
+	El template debera elegirse como Typescript ya que el JS no funciona cuando se sube al Azure.
+	
+2.- El codigo se abre en visual Studio 
+	 a)  Abrir un powerShell
+	   Loggearte Azure
+
+	   az login	
+
+	   Este commando te loggeara al azure y seleccionaras la identidad de susbcription.	
+
+	   Debes crear una identidad primeramente 
+
+   	   az ad app create --display-name "<app-registration-display-name>" --sign-in-audience "AzureADandPersonalMicrosoftAccount"
+
+	   Asi te manda un password de la identidad
+
+	   az ad app credential reset --id "<appId>"
+	
+ 	   Este paso te creara una identidad que mas adelante te la pueden pedir de igual forma deberas tenerlapor si la piden.
+
+	b) Deberas firmarte al Azure desde el Visual studio en la seccion de Subscriptions
+	c) Aqui deberas crear un App Service Avanzado Seleccionando elementos del Portal de Azure.
+	d) Para subir e codigo antes de deberas ejecutar la sig instruccion :
+	
+	az bot prepare-deploy --code-dir "." --lang 'Javascript'
+
+	Esta linea anterior crea el web.config para la publicacion.
+
+	e) ntes de subirlo deberas ejecutar el siguinete commando 
+
+	npm run build 
+
+	Este commando compila tu codigo antes de ser subido
+
+	f) para Subir el codigo deberas seleccionar todos los archivos del directorio excepto el node_modules 
+	crear un zip con esos archivos y ejecutar el siguiente commando en la ruta del archivo .zip creado
+
+	az webapp deployment source config-zip --resource-group "CCSIBot-Production" --name "ccsibot" --src "./ccsibot.zip"
+
+	Este ultimo commando subira tus archivos al Azure
+
+3.- El codigo estando en azure deberas irte al App service creado 
+	Seccion Development Tools -> Console Aqui deberas aplicar el 
+	
+	npm install
+
+	y 
+
+	npm start
+
+4.- Se debera crear un objeto de Azure Bot dentro del portal de Azure
+
+	 Dentro del objeto creado Azure Bot en la seccion Settings -> Configuration en el campo Messaging endpoint deberas colocar el endpoint de comunicacion
+	 Ejemplo
+	 
+	 https://ccsibot.azurewebsites.net/api/messages
+	
+	 Posteriormente te vas a Test in Web Chat.
+	 Have some fun !!!
+
+
+---------------------------------------------------------------------------------
+
+
+
+
+Nota hay unos templates que nos permiten crear los objetos en azure de manera manual 
+Este es un comando que se utiliza para crear el App Service Avanzado de manera manual 
+
+az deployment sub create --template-file ".\template-BotApp-new-rg.json" --location "westus" --parameters ".\parameters-for-template-BotApp-new-rg.json"
+
+NOTA : Mas sin Embargo esta es solo investigacion adicional por si hay alguien que esta interesado :)
+
+
+
+
+
+	
